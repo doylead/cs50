@@ -2,8 +2,56 @@
 // Part of CS50 self-paced work
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <cs50.h>
 #include <math.h>
+
+// Prototype Functions
+int countDigits(long toCount);
+int getDigit(long toSearch, int index);
+int sumDigits(long toSum);
+int checkVisa(long toCheck);
+int checkMasterCard(long toCheck);
+int checkAmericanExpress(long toCheck);
+int checkLuhn(long toLuhn);
+
+// Driver program; answers the question
+// Is the input number a valid credit card number, and which
+// type of card would it be?
+int main(void)
+{
+    long input = get_long("Number: ");
+    int luhnValid = checkLuhn(input);
+    int isVisa = checkVisa(input);
+    int isMasterCard = checkMasterCard(input);
+    int isAmericanExpress = checkAmericanExpress(input);
+
+    if (luhnValid == 1)
+    {
+        if (isVisa == 1)
+        {
+            printf("VISA\n");
+        }
+        else if (isMasterCard == 1)
+        {
+            printf("MASTERCARD\n");
+        }
+        else if (isAmericanExpress == 1)
+        {
+            printf("AMEX\n");
+        }
+        else
+        {
+            printf("INVALID\n");
+        }
+    }
+    else
+    {
+        printf("INVALID\n");
+    }
+    return EXIT_SUCCESS;
+}
+
 
 // Count the number of digits in an input number
 // TODO - Currently only counts digits to the left of the decimal point
@@ -130,41 +178,3 @@ int checkLuhn(long toLuhn)
     }
     return luhnValid;
 }
-
-// Driver program; answers the question
-// "Is the input number a valid credit card number, and which
-// type of card would it be?"
-int main(void)
-{
-    long input = get_long("Number: ");
-    int luhnValid = checkLuhn(input);
-    int isVisa = checkVisa(input);
-    int isMasterCard = checkMasterCard(input);
-    int isAmericanExpress = checkAmericanExpress(input);
-
-    if (luhnValid == 1)
-    {
-        if (isVisa == 1)
-        {
-            printf("VISA\n");
-        }
-        else if (isMasterCard == 1)
-        {
-            printf("MASTERCARD\n");
-        }
-        else if (isAmericanExpress == 1)
-        {
-            printf("AMEX\n");
-        }
-        else
-        {
-            printf("INVALID\n");
-        }
-    }
-    else
-    {
-        printf("INVALID\n");
-    }
-    return 0;
-}
-
