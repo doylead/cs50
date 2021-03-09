@@ -1,0 +1,1 @@
+clang mario.c -o mario.out -lcs50 -std=c17
