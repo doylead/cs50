@@ -1,15 +1,9 @@
 // Attempt at the "More Comfortable" Mario problem
 #include <stdio.h>
+#include <stdlib.h>
 #include <cs50.h>
 
-// Prints character c to stdout n times
-void repeatNTimes(int n, char *c)
-{
-    for (int i = 0; i < n; i++)
-    {
-        printf("%s", c);
-    }
-}
+void repeatNTimes(int n, char *c);
 
 int main(void) 
 {
@@ -36,6 +30,14 @@ int main(void)
         printf("\n");
     }
 
-    return 0;
+    return EXIT_SUCCESS;
 }
 
+// Prints character c to stdout n times
+void repeatNTimes(int n, char *c)
+{
+    for (int i = 0; i < n; i++)
+    {
+        printf("%s", c);
+    }
+}
