@@ -1,0 +1,1 @@
+clang credit.c -o credit.out -lcs50 -lm -std=c17
