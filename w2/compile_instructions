@@ -1,0 +1,1 @@
+clang substitution.c -o substitution.out -lcs50 -std=c17
