@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 #include <cs50.h>
 
 // Contsant variables
@@ -11,7 +12,6 @@ const int NUMLETTERS = 26;
 
 // Function Prototypes
 int validateKey(string key);
-char toLowerCase(char c);
 
 // Main Driver Code
 //
@@ -57,7 +57,7 @@ int validateKey(string key)
         for (int i = 0; i < nCharsKey; i++)
         {
             char c = key[i];
-            char lowerCaseC = toLowerCase(c);
+            char lowerCaseC = tolower(c);
             int offset = (int) lowerCaseC - startIndex;
             if (offset <= NUMLETTERS)
             {
@@ -86,31 +86,4 @@ int validateKey(string key)
     {
         return 0;
     }
-}
-
-// Converts an upper case ASCII character input to the corresponding lower 
-// case ASCII character
-// For any other character input, return the same character
-// 
-// This has been tested with several inputs (upper case, lower case,
-// non-alphabet characters) and appears to work
-char toLowerCase(char c)
-{
-    int integerRepresentation = (int) c;
-    int startIndex = (int) 'A';
-    int endIndex = (int) 'Z';
-    int shift = (int) 'a' - (int) 'A';
-    int outputIntegerRepresentation;
-
-    if ((startIndex <= integerRepresentation) &&
-        (integerRepresentation <= endIndex))
-    {
-        outputIntegerRepresentation = integerRepresentation + shift;
-    }
-    else
-    {
-        outputIntegerRepresentation = integerRepresentation;
-    }
-    char lowerCase = (char) outputIntegerRepresentation;
-    return lowerCase;
 }
