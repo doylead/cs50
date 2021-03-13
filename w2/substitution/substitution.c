@@ -9,48 +9,95 @@
 
 // Contsant variables
 const int NUMLETTERS = 26;
+const int NUMASCII = 128;
 
 // Function Prototypes
 int validateKey(string key);
 
 // Main Driver Code
-//
-// Status: Currently only used for testing supporting functions
-int main(void){
-    int isValidKey;
-    string key;
-    do
+// Assumptions: All characters are ASCII
+// 
+// Status: Working on developing the encryption mapping
+// 
+// Output error codes
+/// 0 - Success
+/// 1 - Incorrect number of command line inputs
+/// 2 - Key contains incorrect number of characters
+/// 3 - Key contains non-alphabet characters (but has the correct total number of characters)
+/// 4 - Key does not contain a one to one mapping for each character
+/// Note: Error codes are in some sense consecutive (e.g. if both 2 and 3 apply, 2 will be returned)
+int main(int argc, string argv[])
+{
+    if (argc != 2)
     {
-        key = get_string("Key: ");
-        isValidKey = validateKey(key);
+        printf("Usage: ./substitution.out key\n");
+        return 1; // See error codes before definition of main
     }
-    while (isValidKey == 0);
+
+    // Checks to see if the key is valid
+    string key = argv[1];
+    int isValidKey = validateKey(key);
+    if (isValidKey != 0)
+    {
+        return isValidKey; // See error codes before definition of main
+    }
+
+    // Use a valid key to encrypt a message
+    // This does not currently use a "helper function" as functions cannot
+    // return an array in C
+
+    // Because we've now validated the key, generate a mapping of the form
+    // mapping[(int) i] --> j
+    // where i is the unencrypted character, and (char) j is the encrypted
+    // character
+    //
+    // Initialize the base array (no encryption)
+    int mapping[NUMASCII];
+    for (int i = 0; i < NUMASCII; i++)
+    {
+        mapping[i] = i;
+    }
+
+    // Add information from the provided key
+    int upperCaseStart = (int) 'A';
+    int lowerCaseStart = (int) 'a';
+    int offset = 0;
+    for (int i = 0; i < NUMLETTERS)
+    {
+        char c = key[i];
+        if (isupper(c) != 0) // Is lowercase
+        {
+            offset = (int) c - lowerCaseStart;
+        }
+        else if (islower(c) != 0) // Is uppercase
+        {
+            offset = (int) c - upperCaseStart;
+        }
+    }
+
+    // Ask for the input string to be encrypted
+    string unencrypted_string = get_string("Input String: ");
+    printf("Echo %s\n", unencrypted_string);
 
     return EXIT_SUCCESS;
 }
 
 // Answers the question
 // Is the supplied key valid?
-// Checks (1) if the supplied key is the correct length
-// and, if so, (2) if all characters in key are unique
-//
-// Status: Works as expected just so long as all characters in
-// key are letters
 int validateKey(string key)
 {
-    // Initialize the frequency table
+    // Initialize character frequency table for the key
     int frequency[NUMLETTERS];
     for (int i = 0; i < NUMLETTERS; i++)
     {
         frequency[i] = 0;
     }
-    
     int nCharsKey = strlen(key);
     int startIndex = (int) 'a';
+    int allCharsUnique = 1;
 
     // If the key doesn't have the appropriate number of characters it
-    // cannot be considered valid.  This may be premature optimization
-    // as it only really saves us time if the input key is very long
+    // cannot be considered valid
     if (nCharsKey == NUMLETTERS)
     {
         // Populate the frequency table for each character, ignoring case
@@ -63,27 +110,33 @@ int validateKey(string key)
             {
                 frequency[offset] += 1;
             }
-        }
-        // Print the frequency table (for debugging/testing)        
-        for (int i = 0; i < nCharsKey; i++)
-        {
-            char c = (char) (startIndex + i);
-            printf("%c: %i\n", c, frequency[i]);
+
+            // Any non-alphabet characters would lead to an invalid key
+            if (isalpha(c) == 0)
+            {
+                return 3; // See error codes before definition of main
+            }
         }
 
-        int allCharsUnique = 1;
+        // Checks that each character applies once and only once
         for (int i = 0; i < nCharsKey; i++)
         {
-            if (frequency[i] > 1)
-                {
-                    allCharsUnique = 0;
-                }
+            if (frequency[i] != 1)
+            {
+                allCharsUnique = 0;
+            }
         }
-
-        return allCharsUnique;
+        if (allCharsUnique == 1)
+        {
+            return 0; // See error codes before definition of main
+        }
+        else if(allCharsUnique == 0)
+        {
+            return 4; // See error codes before definition of main
+        }
     }
     else
     {
-        return 0;
+        return 2; // See error codes before definition of main
     }
 }
