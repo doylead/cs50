@@ -62,28 +62,46 @@ int main(int argc, string argv[])
     int upperCaseStart = (int) 'A';
     int lowerCaseStart = (int) 'a';
     int offset = 0;
-    for (int i = 0; i < NUMLETTERS)
+    for (int i = 0; i < NUMLETTERS; i++)
     {
         char c = key[i];
-        if (isupper(c) != 0) // Is lowercase
+        if (isupper(c) == 0) // Is lowercase
         {
             offset = (int) c - lowerCaseStart;
         }
-        else if (islower(c) != 0) // Is uppercase
+        else if (islower(c) == 0) // Is uppercase
         {
             offset = (int) c - upperCaseStart;
         }
+        mapping[upperCaseStart + i] = upperCaseStart + offset;
+        mapping[lowerCaseStart + i] = lowerCaseStart + offset;
     }
 
     // Ask for the input string to be encrypted
-    string unencrypted_string = get_string("Input String: ");
-    printf("Echo %s\n", unencrypted_string);
+    string unencryptedString = get_string("plaintext: ");
+
+    // Perform the encryption
+    int nCharsInput = strlen(unencryptedString);
+    char encryptedString[nCharsInput + 1];
+    for (int i = 0; i < nCharsInput; i++)
+    {
+        char unencrypted_c = unencryptedString[i];
+        int unencrypted_i = (int) unencrypted_c;
+        int encrypted_i = mapping[unencrypted_i];
+        char encrypted_c = (char) encrypted_i;
+        encryptedString[i] = encrypted_c;
+    }
+    encryptedString[nCharsInput] = '\0';
+
+    // Output result
+    printf("ciphertext: %s\n", encryptedString);
 
     return EXIT_SUCCESS;
 }
 
 // Answers the question
 // Is the supplied key valid?
+// Warning: "non-void function does not return a value in all control paths"
 int validateKey(string key)
 {
     // Initialize character frequency table for the key
@@ -130,7 +148,7 @@ int validateKey(string key)
         {
             return 0; // See error codes before definition of main
         }
-        else if(allCharsUnique == 0)
+        else if (allCharsUnique == 0)
         {
             return 4; // See error codes before definition of main
         }
