@@ -1,0 +1,1 @@
+clang scrabble.c -o scrabble.out -lcs50 -std=c17
